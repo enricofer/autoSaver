@@ -166,6 +166,14 @@ class autoSaver:
             text=self.tr(u'auto save current project'),
             callback=self.run,
             parent=self.iface.mainWindow())
+        s = QSettings()
+        autoSaveEnabled = s.value("autoSaver/enabled", defaultValue =  "undef")
+        if autoSaveEnabled = "undef":
+            s.setValue("autoSaver/enabled","false")
+            s.setValue("autoSaver/alternateBak","true")
+            s.setValue("autoSaver/interval","0")
+        else:
+
 
 
     def unload(self):
