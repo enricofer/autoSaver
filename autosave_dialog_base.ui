@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>283</width>
-    <height>144</height>
+    <height>123</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>-80</x>
-     <y>100</y>
+     <y>80</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -58,14 +58,17 @@
   <widget class="QLineEdit" name="interval">
    <property name="geometry">
     <rect>
-     <x>12</x>
+     <x>22</x>
      <y>60</y>
-     <width>31</width>
+     <width>21</width>
      <height>20</height>
     </rect>
    </property>
    <property name="inputMethodHints">
-    <set>Qt::ImhDigitsOnly</set>
+    <set>Qt::ImhNone</set>
+   </property>
+   <property name="inputMask">
+    <string>00; </string>
    </property>
   </widget>
   <widget class="QLabel" name="intervalLabel">

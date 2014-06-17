@@ -20,7 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+from PyQt4.QtGui import *
 from PyQt4.QtGui import QAction, QIcon
 from PyQt4 import uic
 # Initialize Qt resources from file resources.py
@@ -60,8 +61,8 @@ class autoSaver:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        #self.dlg = autoSaverDialog()
-        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "autosave_dialog_base.ui" ) )
+        self.dlg = autoSaverDialog()
+        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "autosave_dialog_base.ui" ) )
         
 
         # Declare instance attributes
@@ -71,9 +72,6 @@ class autoSaver:
         self.toolbar = self.iface.addToolBar(u'autoSaver')
         self.toolbar.setObjectName(u'autoSaver')
 
-        self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
-        self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
-        self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
 
 
     # noinspection PyMethodMayBeStatic
@@ -174,7 +172,13 @@ class autoSaver:
             text=self.tr(u'auto save current project'),
             callback=self.run,
             parent=self.iface.mainWindow())
+        self.cron = QTimer()
+        self.cron.timeout.connect(self.cronEvent)
+        #self.cron.stop()
         self.initAutoSaver()
+        self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
+        self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
+        self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
         
     def initAutoSaver(self):
         s = QSettings()
@@ -184,46 +188,51 @@ class autoSaver:
             s.setValue("autoSaver/alternateBak","true")
             s.setValue("autoSaver/interval","10")
             self.dlg.enableAlternate.setChecked(True)
-            self.dlg.intervalLabel.setNum(10)
+            self.dlg.interval.setNum(10)
         elif autoSaveEnabled == "true":
             self.startAutosave(s.value("autoSaver/interval",""))
-            self.dlg.enableAlternate.enable()
-            self.dlg.interval.enable()
-            self.dlg.intervalLabel.enable()
-            self.dlg.intervalLabel.setText(s.value("autoSaver/interval", ""))
+            self.dlg.enableAlternate.setEnabled(True)
+            self.dlg.interval.setEnabled(True)
+            self.dlg.intervalLabel.setEnabled(True)
+            self.dlg.interval.setText(s.value("autoSaver/interval", ""))
             self.dlg.enableAutoSave.setChecked(True)
             if s.value("autoSaver/alternateBak", "") == "true":
                 self.dlg.enableAlternate.setChecked(True)
             else:
-                self.dlg.enableAlternate.setChecked(None)
+                self.dlg.enableAlternate.setChecked(bool(None))
         elif autoSaveEnabled == "false":
             #self.startAutosave(s.value("autoSaver/interval"),"")
-            self.dlg.enableAlternate.disable()
-            self.dlg.interval.disable()
-            self.dlg.intervalLabel.disable()
-            self.dlg.enableAutoSave.setChecked(None)
-            self.dlg.intervalLabel.setText(s.value("autoSaver/interval", ""))
-            self.dlg.enableAutoSave.setChecked(True)
+            self.dlg.enableAlternate.setDisabled(True)
+            self.dlg.interval.setDisabled(True)
+            self.dlg.intervalLabel.setDisabled(True)
+            self.dlg.enableAutoSave.setChecked(False)
+            self.dlg.interval.setText(s.value("autoSaver/interval", ""))
             if s.value("autoSaver/alternateBak", "") == "true":
                 self.dlg.enableAlternate.setChecked(True)
             else:
-                self.dlg.enableAlternate.setChecked(None)
+                self.dlg.enableAlternate.setChecked(bool(None))
         
 
     def enableAutoSave(self):
+        print "clicked"
         if self.dlg.enableAutoSave.isChecked():
-            self.dlg.enableAlternate.enable()
-            self.dlg.interval.enable()
-            self.dlg.intervalLabel.enable()
+            self.dlg.enableAlternate.setEnabled(True)
+            self.dlg.interval.setEnabled(True)
+            self.dlg.intervalLabel.setEnabled(True)
         else:
-            self.dlg.enableAlternate.disable()
-            self.dlg.interval.disable()
-            self.dlg.intervalLabel.disable()
+            self.dlg.enableAlternate.setDisabled(True)
+            self.dlg.interval.setDisabled(True)
+            self.dlg.intervalLabel.setDisabled(True)
 
     def rejectedAction(self):
         self.dlg.hide()
         
     def acceptedAction(self):
+        try:
+            number = int(self.dlg.interval.text())
+        except Exception:
+            QMessageBox.about(None, 'Error','Interval can only be a number')
+            return None
         s = QSettings()
         if self.dlg.enableAutoSave.isChecked():
             s.setValue("autoSaver/enabled","true")
@@ -232,6 +241,7 @@ class autoSaver:
             else:
                 s.setValue("autoSaver/alternateBak","false")
             s.setValue("autoSaver/interval",self.dlg.interval.text())
+            self.startAutosave(self.dlg.interval.text())
         else:
             s.setValue("autoSaver/enabled","false")
             if self.dlg.enableAlternate.isChecked():
@@ -239,6 +249,8 @@ class autoSaver:
             else:
                 s.setValue("autoSaver/alternateBak","false")
             s.setValue("autoSaver/interval",self.dlg.interval.text())
+            self.stopAutosave()
+        self.dlg.hide()
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -249,7 +261,13 @@ class autoSaver:
             self.iface.removeToolBarIcon(action)
 
     def startAutosave(self,interval):
-        pass
+        self.cron.start(int(interval)*1000)
+
+    def stopAutosave(self):
+        self.cron.stop()
+
+    def cronEvent(self):
+        print "AutoSave"
 
     def run(self):
         """Run method that performs all the real work"""
