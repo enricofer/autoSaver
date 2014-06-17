@@ -22,6 +22,7 @@
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
+from PyQt4 import uic
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
@@ -59,7 +60,9 @@ class autoSaver:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = autoSaverDialog()
+        #self.dlg = autoSaverDialog()
+        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "autosave_dialog_base.ui" ) )
+        
 
         # Declare instance attributes
         self.actions = []
@@ -67,6 +70,11 @@ class autoSaver:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'autoSaver')
         self.toolbar.setObjectName(u'autoSaver')
+
+        self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
+        self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
+        self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
+
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -166,15 +174,71 @@ class autoSaver:
             text=self.tr(u'auto save current project'),
             callback=self.run,
             parent=self.iface.mainWindow())
+        self.initAutoSaver()
+        
+    def initAutoSaver(self):
         s = QSettings()
         autoSaveEnabled = s.value("autoSaver/enabled", defaultValue =  "undef")
-        if autoSaveEnabled = "undef":
+        if autoSaveEnabled == "undef":
             s.setValue("autoSaver/enabled","false")
             s.setValue("autoSaver/alternateBak","true")
-            s.setValue("autoSaver/interval","0")
+            s.setValue("autoSaver/interval","10")
+            self.dlg.enableAlternate.setChecked(True)
+            self.dlg.intervalLabel.setNum(10)
+        elif autoSaveEnabled == "true":
+            self.startAutosave(s.value("autoSaver/interval",""))
+            self.dlg.enableAlternate.enable()
+            self.dlg.interval.enable()
+            self.dlg.intervalLabel.enable()
+            self.dlg.intervalLabel.setText(s.value("autoSaver/interval", ""))
+            self.dlg.enableAutoSave.setChecked(True)
+            if s.value("autoSaver/alternateBak", "") == "true":
+                self.dlg.enableAlternate.setChecked(True)
+            else:
+                self.dlg.enableAlternate.setChecked(None)
+        elif autoSaveEnabled == "false":
+            #self.startAutosave(s.value("autoSaver/interval"),"")
+            self.dlg.enableAlternate.disable()
+            self.dlg.interval.disable()
+            self.dlg.intervalLabel.disable()
+            self.dlg.enableAutoSave.setChecked(None)
+            self.dlg.intervalLabel.setText(s.value("autoSaver/interval", ""))
+            self.dlg.enableAutoSave.setChecked(True)
+            if s.value("autoSaver/alternateBak", "") == "true":
+                self.dlg.enableAlternate.setChecked(True)
+            else:
+                self.dlg.enableAlternate.setChecked(None)
+        
+
+    def enableAutoSave(self):
+        if self.dlg.enableAutoSave.isChecked():
+            self.dlg.enableAlternate.enable()
+            self.dlg.interval.enable()
+            self.dlg.intervalLabel.enable()
         else:
+            self.dlg.enableAlternate.disable()
+            self.dlg.interval.disable()
+            self.dlg.intervalLabel.disable()
 
-
+    def rejectedAction(self):
+        self.dlg.hide()
+        
+    def acceptedAction(self):
+        s = QSettings()
+        if self.dlg.enableAutoSave.isChecked():
+            s.setValue("autoSaver/enabled","true")
+            if self.dlg.enableAlternate.isChecked():
+                s.setValue("autoSaver/alternateBak","true")
+            else:
+                s.setValue("autoSaver/alternateBak","false")
+            s.setValue("autoSaver/interval",self.dlg.interval.text())
+        else:
+            s.setValue("autoSaver/enabled","false")
+            if self.dlg.enableAlternate.isChecked():
+                s.setValue("autoSaver/alternateBak","true")
+            else:
+                s.setValue("autoSaver/alternateBak","false")
+            s.setValue("autoSaver/interval",self.dlg.interval.text())
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -184,6 +248,8 @@ class autoSaver:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def startAutosave(self,interval):
+        pass
 
     def run(self):
         """Run method that performs all the real work"""

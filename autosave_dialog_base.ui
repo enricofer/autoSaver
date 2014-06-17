@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>autoSaver</string>
   </property>
-  <widget class="QDialogButtonBox" name="button_box">
+  <widget class="QDialogButtonBox" name="buttonOkNo">
    <property name="geometry">
     <rect>
      <x>-80</x>
@@ -55,7 +55,7 @@
     <string>Auto save in alternate backup file (*.bak)</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="interval">
    <property name="geometry">
     <rect>
      <x>12</x>
