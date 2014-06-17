@@ -24,6 +24,7 @@ from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTi
 from PyQt4.QtGui import *
 from PyQt4.QtGui import QAction, QIcon
 from PyQt4 import uic
+from qgis.core import *
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
@@ -69,9 +70,8 @@ class autoSaver:
         self.actions = []
         self.menu = self.tr(u'&autoSaver')
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'autoSaver')
-        self.toolbar.setObjectName(u'autoSaver')
-
+        #self.toolbar = self.iface.addToolBar(u'autoSaver')
+        #self.toolbar.setObjectName(u'autoSaver')
 
 
     # noinspection PyMethodMayBeStatic
@@ -152,7 +152,8 @@ class autoSaver:
             action.setWhatsThis(whats_this)
 
         if add_to_toolbar:
-            self.toolbar.addAction(action)
+            #self.toolbar.addAction(action)
+            self.iface.addToolBarIcon(action)
 
         if add_to_menu:
             self.iface.addPluginToMenu(
@@ -261,13 +262,27 @@ class autoSaver:
             self.iface.removeToolBarIcon(action)
 
     def startAutosave(self,interval):
-        self.cron.start(int(interval)*1000)
+        self.cron.start(int(interval)*60000)
 
     def stopAutosave(self):
         self.cron.stop()
 
     def cronEvent(self):
         print "AutoSave"
+        self.saveCurrentProject()
+
+    def saveCurrentProject(self):
+        origFileName = QgsProject.instance().fileName()
+        print origFileName
+        if origFileName != "" and QgsProject.instance().isDirty():
+            if self.dlg.enableAlternate.isChecked():
+                bakFileName = origFileName + ".bak"
+            else: 
+                bakFileName = origFileName
+            QgsProject.instance().setFileName(bakFileName)
+            QgsProject.instance().write()
+            QgsProject.instance().setFileName(origFileName)
+            print "saved"
 
     def run(self):
         """Run method that performs all the real work"""
