@@ -63,7 +63,6 @@ class autoSaver:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = autoSaverDialog()
-        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "autosave_dialog_base.ui" ) )
         
 
         # Declare instance attributes
@@ -187,6 +186,7 @@ class autoSaver:
         if autoSaveEnabled == "undef":
             s.setValue("autoSaver/enabled","false")
             s.setValue("autoSaver/alternateBak","true")
+            s.setValue("autoSaver/saveLayerInEditMode","false")
             s.setValue("autoSaver/interval","10")
             self.dlg.enableAlternate.setChecked(True)
             self.dlg.interval.setNum(10)
@@ -201,6 +201,11 @@ class autoSaver:
                 self.dlg.enableAlternate.setChecked(True)
             else:
                 self.dlg.enableAlternate.setChecked(bool(None))
+            self.dlg.enableSaveLayers.setEnabled(True)
+            if s.value("autoSaver/saveLayerInEditMode", "") == "true":
+                self.dlg.enableSaveLayers.setChecked(True)
+            else:
+                self.dlg.enableSaveLayers.setChecked(bool(None))
         elif autoSaveEnabled == "false":
             #self.startAutosave(s.value("autoSaver/interval"),"")
             self.dlg.enableAlternate.setDisabled(True)
@@ -212,6 +217,11 @@ class autoSaver:
                 self.dlg.enableAlternate.setChecked(True)
             else:
                 self.dlg.enableAlternate.setChecked(bool(None))
+            self.dlg.enableSaveLayers.setDisabled(True)
+            if s.value("autoSaver/saveLayerInEditMode", "") == "true":
+                self.dlg.enableSaveLayers.setChecked(True)
+            else:
+                self.dlg.enableSaveLayers.setChecked(bool(None))
         
 
     def enableAutoSave(self):
@@ -220,10 +230,12 @@ class autoSaver:
             self.dlg.enableAlternate.setEnabled(True)
             self.dlg.interval.setEnabled(True)
             self.dlg.intervalLabel.setEnabled(True)
+            self.dlg.enableSaveLayers.setEnabled(True)
         else:
             self.dlg.enableAlternate.setDisabled(True)
             self.dlg.interval.setDisabled(True)
             self.dlg.intervalLabel.setDisabled(True)
+            self.dlg.enableSaveLayers.setDisabled(True)
 
     def rejectedAction(self):
         self.dlg.hide()
@@ -241,6 +253,10 @@ class autoSaver:
                 s.setValue("autoSaver/alternateBak","true")
             else:
                 s.setValue("autoSaver/alternateBak","false")
+            if self.dlg.enableSaveLayers.isChecked():
+                s.setValue("autoSaver/saveLayerInEditMode","true")
+            else:
+                s.setValue("autoSaver/saveLayerInEditMode","false")
             s.setValue("autoSaver/interval",self.dlg.interval.text())
             self.startAutosave(self.dlg.interval.text())
         else:
@@ -249,12 +265,18 @@ class autoSaver:
                 s.setValue("autoSaver/alternateBak","true")
             else:
                 s.setValue("autoSaver/alternateBak","false")
+            if self.dlg.enableSaveLayers.isChecked():
+                s.setValue("autoSaver/saveLayerInEditMode","true")
+            else:
+                s.setValue("autoSaver/saveLayerInEditMode","false")
             s.setValue("autoSaver/interval",self.dlg.interval.text())
             self.stopAutosave()
         self.dlg.hide()
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
+        self.cron.stop()
+        self.cron.timeout.disconnect(self.cronEvent)
         for action in self.actions:
             self.iface.removePluginMenu(
                 self.tr(u'&autoSaver'),
@@ -268,12 +290,19 @@ class autoSaver:
         self.cron.stop()
 
     def cronEvent(self):
-        print "AutoSave"
+        if self.dlg.enableSaveLayers.isChecked():
+            self.saveLayersInEditMode()
         self.saveCurrentProject()
+
+    def saveLayersInEditMode(self):
+        for layer in self.iface.mapCanvas().layers():
+            if layer.isEditable() and layer.isModified():
+                layer.commitChanges()
+                layer.startEditing()
+                print "autosaved",layer.name()
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
-        print origFileName
         if origFileName != "" and QgsProject.instance().isDirty():
             if self.dlg.enableAlternate.isChecked():
                 bakFileName = origFileName + ".bak"
@@ -282,7 +311,8 @@ class autoSaver:
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
-            print "saved"
+            QgsProject.instance().dirty(0)
+            print "project autosaved to: ",bakFileName
 
     def run(self):
         """Run method that performs all the real work"""
