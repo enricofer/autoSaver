@@ -63,7 +63,7 @@ class autoSaver:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = autoSaverDialog()
-        
+
 
         # Declare instance attributes
         self.actions = []
@@ -179,7 +179,7 @@ class autoSaver:
         self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
         self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
         self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
-        
+
     def initAutoSaver(self):
         s = QSettings()
         autoSaveEnabled = s.value("autoSaver/enabled", defaultValue =  "undef")
@@ -189,7 +189,7 @@ class autoSaver:
             s.setValue("autoSaver/saveLayerInEditMode","false")
             s.setValue("autoSaver/interval","10")
             self.dlg.enableAlternate.setChecked(True)
-            self.dlg.interval.setNum(10)
+            self.dlg.interval.setText("10")
         elif autoSaveEnabled == "true":
             self.startAutosave(s.value("autoSaver/interval",""))
             self.dlg.enableAlternate.setEnabled(True)
@@ -222,7 +222,7 @@ class autoSaver:
                 self.dlg.enableSaveLayers.setChecked(True)
             else:
                 self.dlg.enableSaveLayers.setChecked(bool(None))
-        
+
 
     def enableAutoSave(self):
         print "clicked"
@@ -239,7 +239,7 @@ class autoSaver:
 
     def rejectedAction(self):
         self.dlg.hide()
-        
+
     def acceptedAction(self):
         try:
             number = int(self.dlg.interval.text())
@@ -306,7 +306,7 @@ class autoSaver:
         if origFileName != "" and QgsProject.instance().isDirty():
             if self.dlg.enableAlternate.isChecked():
                 bakFileName = origFileName + ".bak"
-            else: 
+            else:
                 bakFileName = origFileName
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
