@@ -190,6 +190,10 @@ class autoSaver:
             s.setValue("autoSaver/interval","10")
             self.dlg.enableAlternate.setChecked(True)
             self.dlg.interval.setText("10")
+            self.dlg.enableAlternate.setDisabled(True)
+            self.dlg.interval.setDisabled(True)
+            self.dlg.intervalLabel.setDisabled(True)
+            self.dlg.enableSaveLayers.setDisabled(True)
         elif autoSaveEnabled == "true":
             self.startAutosave(s.value("autoSaver/interval",""))
             self.dlg.enableAlternate.setEnabled(True)
