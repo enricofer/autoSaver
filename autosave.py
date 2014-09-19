@@ -31,6 +31,14 @@ import resources_rc
 from autosave_dialog import autoSaverDialog
 import os.path
 
+class trace:
+
+    def __init__(self):
+        self.trace = None
+        
+    def ce(self,string):
+        if self.trace:
+            print string
 
 class autoSaver:
     """QGIS Plugin Implementation."""
@@ -63,6 +71,7 @@ class autoSaver:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = autoSaverDialog()
+        self.tra = trace()
 
 
         # Declare instance attributes
@@ -229,7 +238,6 @@ class autoSaver:
 
 
     def enableAutoSave(self):
-        print "clicked"
         if self.dlg.enableAutoSave.isChecked():
             self.dlg.enableAlternate.setEnabled(True)
             self.dlg.interval.setEnabled(True)
@@ -303,7 +311,7 @@ class autoSaver:
             if layer.isEditable() and layer.isModified():
                 layer.commitChanges()
                 layer.startEditing()
-                print "autosaved",layer.name()
+                self.tra.ce("autosaved"+layer.name())
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
@@ -316,7 +324,7 @@ class autoSaver:
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
             QgsProject.instance().dirty(0)
-            print "project autosaved to: ",bakFileName
+            self.tra.ce("project autosaved to: "+bakFileName)
 
     def run(self):
         """Run method that performs all the real work"""
