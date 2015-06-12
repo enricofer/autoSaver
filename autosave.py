@@ -359,7 +359,7 @@ class autoSaver:
                 if layer.isEditable() and layer.isModified():
                     layer.commitChanges()
                     layer.startEditing()
-                    self.tra.ce("autosaved"+layer.name())
+                    self.tra.ce(u"autosaved"+layer.name())
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()

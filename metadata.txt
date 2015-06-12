@@ -10,7 +10,7 @@
 name=autoSaver
 qgisMinimumVersion=2.0
 description=auto save current project and modified layers in edit mode at specified interval
-version=1.0
+version=2.2
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 
@@ -19,7 +19,7 @@ email=enricofer@gmail.com
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-# changelog=1.0
+changelog = 2.2 save edits with layer version plugin
 
 # Tags are comma separated with spaces allowed
 tags=
