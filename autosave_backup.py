@@ -20,42 +20,26 @@
  *                                                                         *
  ***************************************************************************/
 """
-if False:
-    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
-    from PyQt4.QtGui import *
-    from PyQt4.QtGui import QAction, QIcon
-    from PyQt4 import uic
-    
-if True:
-    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
-    from qgis.PyQt.QtGui import *
-    from qgis.PyQt.QtGui import  QIcon
-    from qgis.PyQt import uic
-    
-try:
-    from qgis.PyQt.QtGui import QAction
-except:
-    from qgis.PyQt.QtWidgets import QAction
-
-    
+from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+from PyQt4.QtGui import *
+from PyQt4.QtGui import QAction, QIcon
+from PyQt4 import uic
 from qgis.core import *
 from qgis.utils import plugins
-import qgis
 # Initialize Qt resources from file resources.py
-#import .resources_rc
-from . import resources_rc
+import resources_rc
 # Import the code for the dialog
-from .autosave_dialog import autoSaverDialog
+from autosave_dialog import autoSaverDialog
 import os.path
 
 class trace:
 
     def __init__(self):
-        self.trace = True
+        self.trace = None
         
     def ce(self,string):
         if self.trace:
-            print(string)
+            print string
 
 class autoSaver:
     """QGIS Plugin Implementation."""
@@ -222,10 +206,8 @@ class autoSaver:
             self.dlg.intervalLabel.setDisabled(True)
             self.dlg.enableSaveLayers.setDisabled(True)
             self.dlg.enableSaveLayers.setDisabled(True)
-            #self.dlg.enableSaveLayersBuffer.setUnchecked(True)
-            self.dlg.enableSaveLayersBuffer.setChecked(False)
-            #self.dlg.enableSaveLayersBuffer.setDisabled(True)
-            self.dlg.enableSaveLayersBuffer.setEnabled(False)
+            self.dlg.enableSaveLayersBuffer.setUnchecked(True)
+            self.dlg.enableSaveLayersBuffer.setDisabled(True)
         elif autoSaveEnabled == "true":
             self.startAutosave(s.value("autoSaver/interval",""))
             self.dlg.enableAlternate.setEnabled(True)
@@ -247,8 +229,7 @@ class autoSaver:
                     else:
                         self.dlg.enableSaveLayersBuffer.setChecked(bool(None))
                 else:
-                    #self.dlg.enableSaveLayersBuffer.setDisabled(True)
-                    self.dlg.enableSaveLayersBuffer.setEnabled(False)
+                    self.dlg.enableSaveLayersBuffer.setDisabled(True)
             else:
                 self.dlg.enableSaveLayers.setChecked(bool(None))
                 
@@ -306,7 +287,7 @@ class autoSaver:
     def acceptedAction(self):
         try:
             number = int(self.dlg.interval.text())
-        except Exception as e :
+        except Exception:
             QMessageBox.about(None, 'Error','Interval can only be a number')
             return None
         s = QSettings()
@@ -378,8 +359,7 @@ class autoSaver:
                 if layer.isEditable() and layer.isModified():
                     layer.commitChanges()
                     layer.startEditing()
-                    #self.tra.ce(u"autosaved"+layer.name())
-                    self.iface.messageBar().pushMessage("Autosave", u"autosaved : "+layer.name(), level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+                    self.tra.ce(u"autosaved"+layer.name())
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
@@ -391,9 +371,8 @@ class autoSaver:
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
-            #QgsProject.instance().dirty(0)
-            #self.tra.ce(u"project autosaved to: "+bakFileName)
-            self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+bakFileName, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+            QgsProject.instance().dirty(0)
+            self.tra.ce(u"project autosaved to: "+bakFileName)
 
     def run(self):
         """Run method that performs all the real work"""
