@@ -379,7 +379,7 @@ class autoSaver:
                     layer.commitChanges()
                     layer.startEditing()
                     #self.tra.ce(u"autosaved"+layer.name())
-                    self.iface.messageBar().pushMessage("Autosave", u"autosaved : "+layer.name(), level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+                    self.iface.messageBar().pushMessage("Autosave", u"autosaved : "+layer.name(), level=qgis.gui.QgsMessageBar.SUCCESS, duration=10 )
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
@@ -393,7 +393,7 @@ class autoSaver:
             QgsProject.instance().setFileName(origFileName)
             #QgsProject.instance().dirty(0)
             #self.tra.ce(u"project autosaved to: "+bakFileName)
-            self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+bakFileName, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+            self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+bakFileName, level=qgis.gui.QgsMessageBar.SUCCESS, duration=10 )
 
     def run(self):
         """Run method that performs all the real work"""
