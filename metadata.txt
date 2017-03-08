@@ -8,9 +8,10 @@
 
 [general]
 name=autoSaver
-qgisMinimumVersion=2.0
+qgisMinimumVersion=2.8
+qgisMaximumVersion=3.99
 description=auto save current project and modified layers in edit mode at specified interval
-version=2.2
+version=2.3
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 
