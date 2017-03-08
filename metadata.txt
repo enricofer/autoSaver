@@ -14,13 +14,14 @@ description=auto save current project and modified layers in edit mode at specif
 version=2.3
 author=Enrico Ferreguti
 email=enricofer@gmail.com
+about=The plugin provide a basic autosave functionality for project file and  modified layers currently in edit mode. Currents edits can be saved as version files if layerVersion plugin is installed.
 
 # End of mandatory metadata
 
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-changelog = 2.2 save edits with layer version plugin
+changelog = 2.3 code cleaning, issue fixes and migration code to QGIS3 (courtesy of @patricev https://github.com/patricev)
 
 # Tags are comma separated with spaces allowed
 tags=
