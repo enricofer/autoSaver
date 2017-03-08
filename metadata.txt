@@ -26,9 +26,9 @@ changelog = 2.3 code cleaning, issue fixes and migration code to QGIS3 (courtesy
 # Tags are comma separated with spaces allowed
 tags=
 
-homepage=
-tracker=
-repository=
+homepage=http://geogear.wordpress.com/
+tracker=https://github.com/enricofer/autoSaver/issues
+repository=https://github.com/enricofer/autoSaver
 icon=icon.png
 # experimental flag
 experimental=False
