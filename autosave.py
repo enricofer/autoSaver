@@ -34,8 +34,10 @@ if True:
     
 try:
     from qgis.PyQt.QtGui import QAction
+    QGIS3_PLATFORM = None
 except:
     from qgis.PyQt.QtWidgets import QAction
+    QGIS3_PLATFORM = True
 
     
 from qgis.core import *
@@ -205,7 +207,8 @@ class autoSaver:
         self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
         self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
         self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
-        self.dlg.enableSaveLayersBuffer.hide()
+        if QGIS3_PLATFORM:
+            self.dlg.enableSaveLayersBuffer.hide()
 
     def initAutoSaver(self):
         s = QSettings()
@@ -380,7 +383,10 @@ class autoSaver:
                     layer.commitChanges()
                     layer.startEditing()
                     #self.tra.ce(u"autosaved"+layer.name())
-                    self.iface.messageBar().pushSuccess("Autosaver", u"autosaved : "+layer.name())
+                    if QGIS3_PLATFORM:
+                        self.iface.messageBar().pushSuccess("Autosaver", u"autosaved : "+layer.name())
+                    else:
+                        self.iface.messageBar().pushMessage("Autosave", u"autosaved : "+layer.name(), level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
 
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
@@ -394,7 +400,10 @@ class autoSaver:
             QgsProject.instance().setFileName(origFileName)
             #QgsProject.instance().dirty(0)
             #self.tra.ce(u"project autosaved to: "+bakFileName)
-            self.iface.messageBar().pushSuccess("Autosaver", u"project autosaved to: "+bakFileName)
+            if QGIS3_PLATFORM:
+                self.iface.messageBar().pushSuccess("Autosaver", u"project autosaved to: "+bakFileName)
+            else:
+                self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+bakFileName, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
 
     def run(self):
         """Run method that performs all the real work"""
