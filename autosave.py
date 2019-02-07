@@ -21,13 +21,13 @@
  ***************************************************************************/
 """
 if False:
-    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer, QFileInfo
     from PyQt4.QtGui import *
     from PyQt4.QtGui import QAction, QIcon
     from PyQt4 import uic
     
 if True:
-    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer, QFileInfo
     from qgis.PyQt.QtGui import *
     from qgis.PyQt.QtGui import  QIcon
     from qgis.PyQt import uic
@@ -396,7 +396,7 @@ class autoSaver:
             else:
                 bakFileName = origFileName
             QgsProject.instance().setFileName(bakFileName)
-            QgsProject.instance().write()
+            QgsProject.instance().write(QFileInfo(bakFileName))
             QgsProject.instance().setFileName(origFileName)
             #QgsProject.instance().dirty(0)
             #self.tra.ce(u"project autosaved to: "+bakFileName)
