@@ -1,38 +1,47 @@
-# This file contains metadata for your plugin. Since 
-# version 2.0 of QGIS this is the proper way to supply 
-# information about a plugin. The old method of 
-# embedding metadata in __init__.py will 
-# is no longer supported since version 2.0.
+# This file contains metadata for your plugin.
 
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=autoSaver
-qgisMinimumVersion=2.8
-qgisMaximumVersion=3.99
-description=auto save current project and modified layers in edit mode at specified interval
-version=2.4
-author=Enrico Ferreguti
-email=enricofer@gmail.com
-about=The plugin provide a basic autosave functionality for project file and  modified layers currently in edit mode. Currents edits can be saved as version files if layerVersion plugin is installed.
+name=Automatic Backup
+qgisMinimumVersion=3.0
+description=Create automatic backup for your project
+version=0.1
+author=S.Poudroux/Enrico Ferreguti
+email=seboon78@gmail.com
 
+about=Create automatic backup for your project with few options such as interval time, destination folder where to store your backups, and their maximum number.
+
+tracker=https://github.com/Seboon/AutomaticBackup/issues
+repository=https://github.com/Seboon/AutomaticBackup
 # End of mandatory metadata
 
-# Optional items:
+# Recommended items:
 
+hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog = 2.4 QGIS3 migration issues fixed
+# changelog=
 
 # Tags are comma separated with spaces allowed
-tags= project, autosave
+tags=python, export, backup, project, autosave
 
-homepage=http://geogear.wordpress.com/
-tracker=https://github.com/enricofer/autoSaver/issues
-repository=https://github.com/enricofer/autoSaver
+homepage=https://github.com/Seboon/AutomaticBackup
+category=Plugins
 icon=icon.png
 # experimental flag
 experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
 
