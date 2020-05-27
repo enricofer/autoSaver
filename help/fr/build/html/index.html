@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Documentation du plugin Automatic Backup &#8212; Documentation Automatic Backup 0.1</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation-du-plugin-automatic-backup">
+<h1>Documentation du plugin Automatic Backup<a class="headerlink" href="#documentation-du-plugin-automatic-backup" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="presentation">
+<span id="index-0"></span><h2>Présentation<a class="headerlink" href="#presentation" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Ce plugin vous propose de créer des sauvegardes automatiques d’un projet Qgis.</p>
+<p>Plusieurs options s’offrent à vous :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Créer une sauvegarde selon un intervalle spécifié par l’utilisateur.
+Elle se situera dans le même répertoire que celui du projet.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul class="simple">
+<li><p>Sauvegarder les couches en cours d’édition.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul class="simple">
+<li><p>Enregistrer un certain nombre de sauvegardes, dans un dossier spécifique, et toujours selon un intervalle.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="fonctionnement">
+<span id="index-1"></span><h2>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Lien permanent vers ce titre">¶</a></h2>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul>
+<li><p>Cocher uniquement « Activer la sauvegarde automatique » pour créer une sauvegarde dans le même dossier que celui du projet ouvert.</p>
+<p>Définissez ensuite à quelle fréquence vous souhaiter réaliser des sauvegardes avec l’outil « Intervalle ».</p>
+<p>La sauvegarde portera le nom du projet avec l’extension « _backup ».</p>
+</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul class="simple">
+<li><p>Cocher l’option « Sauvegarder les couches en cours d’édition » vous permet d’enregister vos modifications dans les couches concernées.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul>
+<li><p>Si vous cocher « Sauvegarder dans un fichier séparé », indiquez l’endroit et la quantité maximale des sauvegardes que vous désirez.</p>
+<p>Les sauvegardes créées porteront le nom du projet avec une extension indiquant leur date de création/modification, sous le format « Nom du Projet »_backup_Année_mois_jour_heure_minute.</p>
+<p>Exemple : « test_backup_2020_01_02_18_48.qgs »</p>
+</li>
+</ul>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/MainWindow.png"><img alt="_images/MainWindow.png" class="align-center" src="_images/MainWindow.png" style="width: 411px; height: 403px;" /></a>
+</div>
+<div class="section" id="code-source">
+<h2>Code source<a class="headerlink" href="#code-source" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le code source est disponible à l’adresse suivante :</p>
+<p><a class="reference external" href="https://github.com/Seboon/AutomaticBackup.git">https://github.com/Seboon/AutomaticBackup.git</a></p>
+</div>
+<div class="section" id="index-et-tables">
+<h2>Index et tables<a class="headerlink" href="#index-et-tables" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Index du module</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Page de recherche</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/icon.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+  <h3><a href="#">Table des matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Documentation du plugin Automatic Backup</a><ul>
+<li><a class="reference internal" href="#presentation">Présentation</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+<li><a class="reference internal" href="#code-source">Code source</a></li>
+<li><a class="reference internal" href="#index-et-tables">Index et tables</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Recherche rapide</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, S.Poudroux.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
