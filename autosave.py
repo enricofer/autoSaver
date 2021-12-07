@@ -27,7 +27,7 @@ if False:
     from PyQt4 import uic
     
 if True:
-    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer, QFileInfo
     from qgis.PyQt.QtGui import *
     from qgis.PyQt.QtGui import  QIcon
     from qgis.PyQt import uic
@@ -392,18 +392,31 @@ class autoSaver:
         origFileName = QgsProject.instance().fileName()
         if origFileName != "" and QgsProject.instance().isDirty():
             if self.dlg.enableAlternate.isChecked():
-                bakFileName = origFileName + ".bak"
+
+                extension = QFileInfo(origFileName).completeSuffix()
+                basename = QFileInfo(origFileName).baseName()
+                basedir = QFileInfo(origFileName).dir().absolutePath()
+
+                basename,extension = os.path.splitext(origFileName)
+
+                bakFileName = basename + "_bak" + extension
+                targetBakFile = origFileName + '.bak'
+                try:
+                    os.remove(targetBakFile)
+                    os.remove(bakFileName)
+                except:
+                    pass
             else:
                 bakFileName = origFileName
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
-            #QgsProject.instance().dirty(0)
-            #self.tra.ce(u"project autosaved to: "+bakFileName)
+            if self.dlg.enableAlternate.isChecked():
+                os.rename(bakFileName, targetBakFile)
             if QGIS3_PLATFORM:
-                self.iface.messageBar().pushSuccess("Autosaver", u"project autosaved to: "+bakFileName)
+                self.iface.messageBar().pushSuccess("Autosaver", u"project autosaved to: "+targetBakFile)
             else:
-                self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+bakFileName, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+                self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+targetBakFile, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
 
     def run(self):
         """Run method that performs all the real work"""
