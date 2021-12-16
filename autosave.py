@@ -406,17 +406,19 @@ class autoSaver:
                     os.remove(bakFileName)
                 except:
                     pass
+                msg = u"project autosaved to: "+targetBakFile
             else:
                 bakFileName = origFileName
+                msg = u"project autosaved"
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
             if self.dlg.enableAlternate.isChecked():
                 os.rename(bakFileName, targetBakFile)
             if QGIS3_PLATFORM:
-                self.iface.messageBar().pushSuccess("Autosaver", u"project autosaved to: "+targetBakFile)
+                self.iface.messageBar().pushSuccess("Autosaver", msg)
             else:
-                self.iface.messageBar().pushMessage("Autosave", u"project autosaved to: "+targetBakFile, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+                self.iface.messageBar().pushMessage("Autosave", msg, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
 
     def run(self):
         """Run method that performs all the real work"""
