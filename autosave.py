@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 if False:
-    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
+    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer, QFileInfo
     from PyQt4.QtGui import *
     from PyQt4.QtGui import QAction, QIcon
     from PyQt4 import uic
@@ -411,7 +411,7 @@ class autoSaver:
                 bakFileName = origFileName
                 msg = u"project autosaved"
             QgsProject.instance().setFileName(bakFileName)
-            QgsProject.instance().write()
+            QgsProject.instance().write(QFileInfo(bakFileName))
             QgsProject.instance().setFileName(origFileName)
             if self.dlg.enableAlternate.isChecked():
                 os.rename(bakFileName, targetBakFile)
