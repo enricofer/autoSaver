@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/plugins/autoSaver" >
-        <file>icon.png</file>
-    </qresource>
-</RCC>
