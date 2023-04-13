@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Resource object code
 #
 # Created: mar 17. giu 10:15:28 2014
@@ -7,7 +5,6 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-#from PyQt4 import QtCore
 from qgis.PyQt import QtCore
 
 qt_resource_data = b"\

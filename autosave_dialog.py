@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  autoSaverDialog
@@ -21,13 +20,7 @@
  ***************************************************************************/
 """
 
-#from PyQt4 import QtGui, uic
-from qgis.PyQt import QtGui, uic
-
-try:
-    from qgis.PyQt.QtGui import QDialog
-except:
-    from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog
 
 from .ui_autosave_dialog_base import Ui_autoSaverDialogBase
 
