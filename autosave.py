@@ -390,11 +390,17 @@ class autoSaver:
             else:
                 bakFileName = origFileName
                 msg = "project autosaved"
+
+            # The environment QGIS_PLUGIN_AUTO_SAVING can be used to
+            os.environ['QGIS_PLUGIN_AUTO_SAVER'] = str(True)
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
             if self.dlg.enableAlternate.isChecked():
                 os.rename(bakFileName, targetBakFile)
+
+            del os.environ['QGIS_PLUGIN_AUTO_SAVING']
+
             self.iface.messageBar().pushSuccess("Autosaver", msg)
 
     def run(self):
