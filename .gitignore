@@ -7,3 +7,6 @@ scripts/
 test/
 .DS_Store
 plugin_upload.py
+
+# IDE
+.idea/
