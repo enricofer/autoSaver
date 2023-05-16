@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  autoSaver
@@ -20,26 +19,13 @@
  *                                                                         *
  ***************************************************************************/
 """
-if False:
-    from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer
-    from PyQt4.QtGui import *
-    from PyQt4.QtGui import QAction, QIcon
-    from PyQt4 import uic
-    
-if True:
-    from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QTimer, QFileInfo
-    from qgis.PyQt.QtGui import *
-    from qgis.PyQt.QtGui import  QIcon
-    from qgis.PyQt import uic
-    
-try:
-    from qgis.PyQt.QtGui import QAction
-    QGIS3_PLATFORM = None
-except:
-    from qgis.PyQt.QtWidgets import QAction
-    QGIS3_PLATFORM = True
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QTimer, QFileInfo
+from qgis.PyQt.QtGui import *
+from qgis.PyQt.QtGui import QIcon
 
-    
+from qgis.PyQt.QtWidgets import QAction
+
+
 from qgis.core import *
 from qgis.utils import plugins
 import qgis
@@ -54,7 +40,7 @@ class trace:
 
     def __init__(self):
         self.trace = True
-        
+
     def ce(self,string):
         if self.trace:
             print(string)
@@ -85,8 +71,7 @@ class autoSaver:
             self.translator = QTranslator()
             self.translator.load(locale_path)
 
-            if qVersion() > '4.3.3':
-                QCoreApplication.installTranslator(self.translator)
+            QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
         self.dlg = autoSaverDialog()
@@ -95,7 +80,7 @@ class autoSaver:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&autoSaver')
+        self.menu = self.tr('&autoSaver')
         # TODO: We are going to let the user set this up in a future iteration
         #self.toolbar = self.iface.addToolBar(u'autoSaver')
         #self.toolbar.setObjectName(u'autoSaver')
@@ -197,7 +182,7 @@ class autoSaver:
         icon_path = ':/plugins/autoSaver/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'auto save current project'),
+            text=self.tr('auto save current project'),
             callback=self.run,
             parent=self.iface.mainWindow())
         self.cron = QTimer()
@@ -207,8 +192,7 @@ class autoSaver:
         self.dlg.enableAutoSave.clicked.connect(self.enableAutoSave)
         self.dlg.buttonOkNo.accepted .connect(self.acceptedAction)
         self.dlg.buttonOkNo.rejected.connect(self.rejectedAction)
-        if QGIS3_PLATFORM:
-            self.dlg.enableSaveLayersBuffer.hide()
+        self.dlg.enableSaveLayersBuffer.hide()
 
     def initAutoSaver(self):
         s = QSettings()
@@ -255,7 +239,7 @@ class autoSaver:
                     self.dlg.enableSaveLayersBuffer.setEnabled(False)
             else:
                 self.dlg.enableSaveLayers.setChecked(bool(None))
-                
+
         elif autoSaveEnabled == "false":
             #self.startAutosave(s.value("autoSaver/interval"),"")
             self.dlg.enableAlternate.setDisabled(True)
@@ -273,7 +257,7 @@ class autoSaver:
             else:
                 self.dlg.enableSaveLayers.setChecked(bool(None))
             self.dlg.enableSaveLayersBuffer.setDisabled(True)
-            
+
             if s.value("autoSaver/saveLayerInEditMode", "") == "true":
                 self.dlg.enableSaveLayers.setChecked(True)
                 if 'layerVersion' in plugins:
@@ -354,7 +338,7 @@ class autoSaver:
         self.cron.timeout.disconnect(self.cronEvent)
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&autoSaver'),
+                self.tr('&autoSaver'),
                 action)
             self.iface.removeToolBarIcon(action)
 
@@ -383,11 +367,7 @@ class autoSaver:
                     layer.commitChanges()
                     layer.startEditing()
                     #self.tra.ce(u"autosaved"+layer.name())
-                    if QGIS3_PLATFORM:
-                        self.iface.messageBar().pushSuccess("Autosaver", u"autosaved : "+layer.name())
-                    else:
-                        self.iface.messageBar().pushMessage("Autosave", u"autosaved : "+layer.name(), level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
-
+                    self.iface.messageBar().pushSuccess("Autosaver", "autosaved : "+layer.name())
     def saveCurrentProject(self):
         origFileName = QgsProject.instance().fileName()
         if origFileName != "" and QgsProject.instance().isDirty():
@@ -406,19 +386,16 @@ class autoSaver:
                     os.remove(bakFileName)
                 except:
                     pass
-                msg = u"project autosaved to: "+targetBakFile
+                msg = "project autosaved to: "+targetBakFile
             else:
                 bakFileName = origFileName
-                msg = u"project autosaved"
+                msg = "project autosaved"
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
             QgsProject.instance().setFileName(origFileName)
             if self.dlg.enableAlternate.isChecked():
                 os.rename(bakFileName, targetBakFile)
-            if QGIS3_PLATFORM:
-                self.iface.messageBar().pushSuccess("Autosaver", msg)
-            else:
-                self.iface.messageBar().pushMessage("Autosave", msg, level=qgis.gui.QgsMessageBar.SUCCESS, duration=3 )
+            self.iface.messageBar().pushSuccess("Autosaver", msg)
 
     def run(self):
         """Run method that performs all the real work"""

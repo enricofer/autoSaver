@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'ui_autosave_dialog_base.ui'
 #
 # Created: Thu Oct 09 11:09:51 2014
@@ -7,13 +5,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-#from PyQt4 import QtCore, QtGui
 from qgis.PyQt import QtCore, QtGui
 
-try:
-    from qgis.PyQt.QtGui import QDialogButtonBox, QCheckBox, QLabel, QLineEdit, QApplication
-except:
-    from qgis.PyQt.QtWidgets import QDialogButtonBox, QCheckBox, QLabel, QLineEdit, QApplication
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QCheckBox, QLabel, QLineEdit, QApplication
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -29,7 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QApplication.translate(context, text, disambig)
 
-class Ui_autoSaverDialogBase(object):
+class Ui_autoSaverDialogBase:
     def setupUi(self, autoSaverDialogBase):
         autoSaverDialogBase.setObjectName(_fromUtf8("autoSaverDialogBase"))
         autoSaverDialogBase.resize(364, 141)
@@ -73,4 +67,3 @@ class Ui_autoSaverDialogBase(object):
         self.intervalLabel.setText(_translate("autoSaverDialogBase", "Interval (minutes)", None))
         self.enableSaveLayers.setText(_translate("autoSaverDialogBase", "Auto save layers in edit mode", None))
         self.enableSaveLayersBuffer.setText(_translate("autoSaverDialogBase", "Auto save layers in file *.qlv (to open with layerVersion plugin)", None))
-
