@@ -21,13 +21,16 @@
 """
 
 from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt import uic
+from pathlib import Path
 
-from .ui_autosave_dialog_base import Ui_autoSaverDialogBase
+ui_file = Path(__file__).resolve().parent / 'ui_autosave_dialog_base.ui'
+ui_class, _ = uic.loadUiType(ui_file)
 
 
-class autoSaverDialog(QDialog, Ui_autoSaverDialogBase):
+class autoSaverDialog(ui_class, QDialog):
     def __init__(self):
-        QDialog.__init__(self)
+        super().__init__()
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
