@@ -11,7 +11,7 @@ name=autoSaver
 qgisMinimumVersion=3.0
 qgisMaximumVersion=3.99
 description=auto save current project and modified layers in edit mode at specified interval
-version=2.6
+version=2.7
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 about=The plugin provide a basic autosave functionality for project file and  modified layers currently in edit mode. Currents edits can be saved as version files if layerVersion plugin is installed.
@@ -21,7 +21,7 @@ about=The plugin provide a basic autosave functionality for project file and  mo
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-changelog = 2.6 Fixed issue on autosave on same project file
+changelog = 2.7 Interoperability improvement and Code clean-up - courtesy of Étienne Trimaille @Gustry
 
 # Tags are comma separated with spaces allowed
 tags= project, autosave
