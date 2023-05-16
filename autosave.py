@@ -19,6 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 """
+from pathlib import Path
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QTimer, QFileInfo
 from qgis.PyQt.QtGui import *
 from qgis.PyQt.QtGui import QIcon
@@ -26,12 +28,14 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
 
+from qgis.PyQt import uic
+
+from qgis.PyQt.QtWidgets import QAction
+
+
 from qgis.core import *
 from qgis.utils import plugins
 import qgis
-# Initialize Qt resources from file resources.py
-#import .resources_rc
-from . import resources_rc
 # Import the code for the dialog
 from .autosave_dialog import autoSaverDialog
 import os.path
@@ -178,10 +182,8 @@ class autoSaver:
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-
-        icon_path = ':/plugins/autoSaver/icon.png'
         self.add_action(
-            icon_path,
+            str(self.plugin_path('icon.png')),
             text=self.tr('auto save current project'),
             callback=self.run,
             parent=self.iface.mainWindow())
@@ -270,6 +272,14 @@ class autoSaver:
                     self.dlg.enableSaveLayersBuffer.setDisabled(True)
             else:
                 self.dlg.enableSaveLayers.setChecked(bool(None))
+
+    @staticmethod
+    def plugin_path(*args) -> Path:
+        """ Return the path to the plugin root folder or file. """
+        path = Path(__file__).resolve().parent
+        for item in args:
+            path = path.joinpath(item)
+        return path
 
     def enableAutoSave(self):
         if self.dlg.enableAutoSave.isChecked():
