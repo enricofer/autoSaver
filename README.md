@@ -1,5 +1,7 @@
 # autoSaver
 
+[![QGIS.org](https://img.shields.io/badge/QGIS.org-published-green)](https://plugins.qgis.org/plugins/autoSaver/)
+
 ## Features
 
 The plugin allows the automatic saving of the project and layers in edit mode at a user-defined interval.

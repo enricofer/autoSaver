@@ -401,7 +401,9 @@ class autoSaver:
                 bakFileName = origFileName
                 msg = "project autosaved"
 
-            # The environment QGIS_PLUGIN_AUTO_SAVING can be used to
+            # The environment variable QGIS_PLUGIN_AUTO_SAVING can be used to notify other processes that the
+            # QgsProject.instance() object is going to be updated temporary.
+            # Indeed, other plugins can listen to the signal QgsProject::fileNameChanged()
             os.environ['QGIS_PLUGIN_AUTO_SAVER'] = str(True)
             QgsProject.instance().setFileName(bakFileName)
             QgsProject.instance().write()
@@ -409,7 +411,12 @@ class autoSaver:
             if self.dlg.enableAlternate.isChecked():
                 os.rename(bakFileName, targetBakFile)
 
-            del os.environ['QGIS_PLUGIN_AUTO_SAVING']
+            try:
+                # https://github.com/enricofer/autoSaver/issues/23
+                # Do not raise any error if the variable is already not here anymore
+                del os.environ['QGIS_PLUGIN_AUTO_SAVING']
+            except KeyError:
+                pass
 
             self.iface.messageBar().pushSuccess("Autosaver", msg)
 
